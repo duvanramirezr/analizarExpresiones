@@ -23,7 +23,7 @@ class Nodo():
 
 
 def evaluar(arbol):
-    print arbol.valor
+   
     if arbol.valor == "+":
         return evaluar(arbol.izq) + evaluar(arbol.der)
     if arbol.valor == "-":
@@ -63,15 +63,21 @@ def armarArbol(pila):
         else:
             auxPila.apilar(Nodo(valor))
             
-    #return diccionario
 
 
-linea = "5 2 2 * - 10 2 / + z ="
-linea2 = "5 2 2 * - 20 2 / + x ="
-linea3 = "x z + r ="
-pilaCad = linea.split(" ")
-armarArbol(pilaCad)
-pilaCad = linea2.split(" ")
-armarArbol(pilaCad)
-pilaCad = linea3.split(" ")
-armarArbol(pilaCad)
+#Capturar la linea y quedarse  
+#linea = "5 2 2 * - 10 2 / + z ="
+#linea2 = "5 2 2 * - 20 2 / + x ="
+#linea3 = "x z + r ="
+
+            
+linea= raw_input("Ingrese la cadena")
+
+while linea != "s":
+    pilaCad = linea.split(" ")
+    if len(pilaCad) !=1:
+        armarArbol(pilaCad)
+    linea= raw_input("Ingrese la cadena")
+
+
+print diccionario
