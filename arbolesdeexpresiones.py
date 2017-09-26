@@ -3,7 +3,7 @@ import re
 
 patron1=re.compile('[-+*=/]') 
 patron2=re.compile('\d+')
-patron3=re.compile('[^A-Za-z0-9_]')
+patron3=re.compile('^[a-z]{1}[A-Za-z0-9_]+$')
 patron4=re.compile('[A-Za-z]')
 
 diccionario = {}
@@ -79,35 +79,59 @@ def armarArbol(pila):
 #l"5 2 2 * - 20 2 / + x ="
 # "x z + r ="
 
-            
+bol=True;         
 linea= raw_input("Ingrese la cadena")
-colaCad=linea.split(" ")
-while linea != "s":
-    pilaCad = linea.split(" ")
-    if len(pilaCad) !=1:
-        armarArbol(pilaCad)
+while linea != "s" and bol:
+    colaCad=linea.split(" ")
+    
+    
+    while len( colaCad)!=0 and bol:
+        valor= colaCad.pop(0)
+        if patron1.search(valor):
+            listaTokens.append(("operador", valor))
+        elif patron2.match(valor):
+            if patron4.search(valor):
+                listaTokens.append(("elemento no valido", valor))
+                bol=False
+            else:
+                listaTokens.append(("digito", valor))
+        elif patron3.match(valor):
+            listaTokens.append(("variable", valor))
+            bol=False
+        else:
+            listaTokens.append(("no valido", valor))
+            
+    print "----------LISTA DE TOKENS-----------"
+    for x in listaTokens:
+        print x
+
+    if not bol:
+        print "Error en el ultimo token impreso\n"
+
+    listaTokens=[]
+
+    if bol:
+        
+        pilaCad = linea.split(" ")
+        if len(pilaCad) !=1:
+            armarArbol(pilaCad)
+        
+        print "----------DICCIONARIO DE VARIABLES-----------"
+        print diccionario 
+        print "\n"
+        pilaCad=[]
     linea= raw_input("Ingrese la cadena")
 
-print "----------DICCIONARIO DE VARIABLES-----------"
-print diccionario 
-print "\n"
-
-
-while len( colaCad)!=0:
-    valor= colaCad.pop(0)
-    if patron1.search(valor):
-        listaTokens.append(("operador", valor))
-    elif patron2.match(valor):
-        if patron4.search(valor):
-            listaTokens.append(("elemento no valido", valor))
-        else:
-            listaTokens.append(("digito", valor))
-    elif patron3.search(valor):
-        listaTokens.append(("elemento no valido", valor))
-    else:
-        listaTokens.append(("variable", valor))
-        
-print "----------LISTA DE TOKENS-----------"
-for x in listaTokens:
-    print x
-
+    Ingrese la cadenas
+""">>> impor re
+SyntaxError: invalid syntax
+>>> import re
+>>> patron3=re.compile('^[a-z]{1}[A-Za-z0-9_]+$')
+>>> patron3.match("z")
+>>> patron3=re.compile('^[a-z]{1}[A-Za-z0-9_]*$')
+>>> patron3.match("z")
+<_sre.SRE_Match object at 0x02B729C0>
+>>> patron3.match("_z")
+>>> patron3.match("z_")
+<_sre.SRE_Match object at 0x02B72BB8>
+>>> """
